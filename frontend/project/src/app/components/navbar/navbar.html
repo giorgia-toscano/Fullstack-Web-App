@@ -1,0 +1,88 @@
+<mat-toolbar class="navbar">
+  <div class="navbar-inner container-fluid">
+
+    <a class="brand d-flex align-items-center gap-2" routerLink="/dashboard">
+      <span class="brand-mark"></span>
+      <span class="brand-name">{{ 'Navbar.BRAND_NAME' | translate }}</span>
+      <span class="brand-sub d-none d-sm-inline">{{ 'Navbar.SUBTITLE' | translate }}</span>
+    </a>
+
+    <nav class="nav-links d-none d-md-flex">
+      <a mat-button routerLink="/dashboard" routerLinkActive="active">{{ 'Navbar.DASHBOARD' | translate }}</a>
+      @if (canSeeProjects()) {
+        <a mat-button routerLink="/projects" routerLinkActive="active">{{ 'Navbar.PROJECTS' | translate }}</a>
+      }
+      <a mat-button routerLink="/employees" routerLinkActive="active">{{ 'Navbar.EMPLOYEES' | translate }}</a>
+      <a mat-button routerLink="/costs" routerLinkActive="active">{{ 'Navbar.COSTS' | translate }}</a>
+    </nav>
+
+    <mat-menu #mainMenu="matMenu">
+      <button mat-menu-item routerLink="/dashboard">
+        <mat-icon>space_dashboard</mat-icon>
+        {{ 'Navbar.DASHBOARD' | translate }}
+      </button>
+        @if (canSeeProjects()) {
+          <button mat-menu-item routerLink="/projects">
+            <mat-icon>work</mat-icon>
+            {{ 'Navbar.PROJECTS' | translate }}
+          </button>
+        }
+        <button mat-menu-item routerLink="/employees">
+            <mat-icon>groups</mat-icon>
+            {{ 'Navbar.EMPLOYEES' | translate }}
+        </button>
+        <button mat-menu-item routerLink="/costs">
+            <mat-icon>receipt_long</mat-icon>
+            {{ 'Navbar.COSTS' | translate }}
+        </button>
+    </mat-menu>
+
+    <div class="right d-flex align-items-center gap-2">
+
+      <button
+        mat-icon-button
+        class="mobile-menu-btn d-md-none"
+        [matMenuTriggerFor]="mainMenu"
+        aria-label="Menu"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <button
+        mat-icon-button
+        class="icon-btn"
+        [class.icon-btn-highlight]="projectCreatedBellOn()"
+        aria-label="Notifiche"
+      >
+        <mat-icon>notifications</mat-icon>
+        <span class="notif-dot"></span>
+      </button>
+
+      <button
+        mat-button
+        class="user-btn"
+        [matMenuTriggerFor]="userMenu"
+        disableRipple
+      >
+        <span class="user-inline">
+          <span class="avatar">{{ userInitial() }}</span>
+          <span class="user-name d-none d-sm-inline">
+            {{ userService.currentUser()?.firstName || ('Navbar.USER_PLACEHOLDER' | translate) }}
+          </span>
+          <mat-icon class="chev">expand_more</mat-icon>
+        </span>
+      </button>
+
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item routerLink="/user/profile">
+          <mat-icon>person</mat-icon>
+          {{ 'Navbar.PROFILE' | translate }}
+        </button>
+        <button mat-menu-item (click)="authService.logout()">
+          <mat-icon>logout</mat-icon>
+          {{ 'Navbar.LOGOUT' | translate }}
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</mat-toolbar>
